@@ -1,0 +1,103 @@
+\documentclass[twoside]{article}
+
+\usepackage[preprint]{aistats2026}
+% If your paper is accepted, change the options for the package
+% aistats2026 as follows:
+%
+%\usepackage[accepted]{aistats2026}
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, plus a copyright note at the end of
+% the first column of the first page.
+
+% We also include a `preprint' option for non-anonymous preprints. 
+% Change the options for the package aistats2026 as follows:
+%
+%\usepackage[preprint]{aistats2026}
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, but does not print the copyright and 
+% venue note at the end of the first column of the first page.
+
+% If you set papersize explicitly, activate the following three lines:
+%\special{papersize = 8.5in, 11in}
+%\setlength{\pdfpageheight}{11in}
+%\setlength{\pdfpagewidth}{8.5in}
+
+% If you use the natbib package, activate the following three lines:
+%\usepackage[round]{natbib}
+%\renewcommand{\bibname}{References}
+%\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+
+% If you use BibTeX in apalike style, activate the following line:
+%\bibliographystyle{apalike}
+
+\usepackage{makecell}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{multirow}
+%\usepackage[backend=bibtex, style=apalike]{biblatex}
+%\addbibresource{references.bib}
+
+\begin{document}
+
+% If your paper is accepted and the title of your paper is very long,
+% the style will print as headings an error message. Use the following
+% command to supply a shorter title of your paper so that it can be
+% used as headings.
+%
+% \runningtitle{I use this title instead because the last one was very long}
+\runningtitle{Causality--$\Delta$}
+
+% If your paper is accepted and the number of authors is large, the
+% style will print as headings an error message. Use the following
+% command to supply a shorter version of the author names so that
+% they can be used as headings (for example, use only the surnames)
+%
+% \runningauthor{Surname 1, Surname 2, Surname 3, ...., Surname n}
+\runningauthor{Rezvan, Gille, Schauer, Torkar}
+
+\twocolumn[
+
+\aistatstitle{Causality--$\Delta$: Jacobian-Based Dependency Analysis in Flow Matching Models}
+
+\aistatsauthor{Reza Rezvan$^1$ \And Gustav Gille$^1$ \And Moritz Schauer$^{1,2}$ \And Richard Torkar$^{1,2}$}
+
+\aistatsaddress{$^1$ Chalmers University of Technology \\ $^2$ University of Gothenburg}]
+
+\input{report/sections/abstract/abstract}
+\input{report/sections/introduction/introduction}
+\input{report/sections/related_work/related_work}
+\input{report/sections/preliminary/preliminary}
+\input{report/sections/background/background}
+\input{report/sections/method/method}
+\input{report/sections/result/result}
+\input{report/sections/conclusion/conclusion}
+\subsubsection*{Acknowledgements}
+\input{report/sections/acknowledgement/acknowledgement}
+\clearpage
+\input{report/sections/appendix/appendix}
+
+\bibliographystyle{apalike}
+\bibliography{report/references}
+
+\end{document}

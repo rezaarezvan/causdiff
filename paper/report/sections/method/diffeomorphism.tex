@@ -1,0 +1,102 @@
+\subsection{Connection to Diffeomorphism}
+\begin{comment}
+We study the flow transporting $\mathbf x_0 \sim \mathcal{N}(0, 3)$ to $\mathbf x_1 \sim \mathcal{N}(0,1)$.
+
+The flow map,
+
+$$
+\phi_t: \mathbf x_0 \mapsto \mathbf x(\mathbf x_0; t)
+$$
+
+solves 
+$$
+\dot{\mathbf x}=f(\mathbf x,t),\quad \mathbf x(0) = \mathbf x_0,
+$$
+
+with the solution,
+
+$$
+\phi_t(\mathbf x_0) = \mathbf x_0 \exp \left(\int_0^t A(s) \ ds \right).
+$$
+
+Since 
+\begin{align*}
+A(s) & = \frac{d}{ds} \left[\tfrac{1}{2} \ln(3 (1-s)^2 + s^2)\right], \\
+\int_0^t A(s) \ ds & = \tfrac{1}{2} \ln \frac{3 (1-t)^2 + t^2}{3},
+\end{align*}
+
+we obtain the closed form,
+$$
+\phi_t(\mathbf x_0) = \mathbf x_0 \sqrt{\tfrac{3(1-t)^2+t^2}{3}}.
+$$
+
+This is a diffeomorphism for $t < 1$. 
+Its derivative (Jacobian) is,
+
+$$
+Y(t) = \frac{\partial \phi_t}{\partial \mathbf x_0}= \sqrt{\tfrac{3 (1-t)^2 + t^2}{3}},
+$$
+
+which we can recover numerically by,
+$$
+\frac{\phi_t (\mathbf x_0 + \varepsilon) - \phi_t(\mathbf x_0)}{\varepsilon}\underset{\varepsilon \downarrow 0}{\longrightarrow}Y(t)
+$$
+confirming that finite differences match the derivative.
+
+Pushing forward $\rho_0=\mathcal{N}(0,3)$ gives,
+
+$$
+\rho_t(x) = \frac{1}{\sqrt{2\pi} \cdot 3Y(t)} \exp \left(-\frac{x^2}{2 \cdot 3Y(t)^2}\right)
+=\mathcal{N}(0,3Y(t)^2),
+$$
+
+with $3Y(t)^2=3(1-t)^2+t^2$, reducing to variance $1$ at $t=1$.  
+Thus, the flow is probability-preserving and differentiable.
+\end{comment}
+
+Consider the flow that transports $\mathbf x_0 \sim \mathcal{N}(\boldsymbol m_0, \boldsymbol \Sigma_0)$ to $\mathbf x_1 \sim \mathcal{N}(\boldsymbol m_1, \boldsymbol \Sigma_1)$. In this linear-Gaussian setting the flow map is explicit. Let,
+\vspace{-0.5em}
+\begin{align*}
+\mathbf A & = \boldsymbol \Sigma_0^{-1/2}\left(\boldsymbol\Sigma_0^{1/2}\boldsymbol \Sigma_1 \boldsymbol \Sigma_0^{1/2}\right)^{1/2} \boldsymbol \Sigma_0^{-1/2}, \\
+\mathbf L & = \log(\mathbf A), \\
+\boldsymbol m(t) & = (1-t)\boldsymbol m_0 + t \boldsymbol m_1.
+\end{align*}
+
+Consider the flow map $\phi_t : \mathbf x_0 \mapsto \mathbf x(\mathbf x_0; t)$ with $\phi_t(\mathbf x_0) = \boldsymbol m(t) + e^{t\mathbf L} (\mathbf x_0 - \boldsymbol m_0).$ This solves the linear ODE,
+
+$$
+\dot{\mathbf x} = \mathbf L\left(\mathbf x - \boldsymbol m(t)\right) + \dot{\boldsymbol m}(t), \quad \mathbf x(0)=\mathbf x_0,
+$$
+
+hence $\phi_t$ is a diffeomorphism for all $t \in [0,1]$ in this construction, with derivative (Jacobian),
+
+$$
+Y(t) = \frac{\partial \phi_t}{\partial \mathbf x_0} = e^{t\mathbf L}.
+$$
+
+Pushing forward $\mathcal{N}(\boldsymbol m_0,\boldsymbol\Sigma_0)$ along $\phi_t$ gives,
+
+$$
+\mathbf x_t \sim \mathcal N \left(\boldsymbol m(t),\boldsymbol\Sigma(t)\right),
+\quad
+\boldsymbol \Sigma(t) = Y(t) \boldsymbol \Sigma_0 Y(t)^T.
+$$
+
+At $t=1$, $\phi_1(\mathbf x_0)=\boldsymbol m_1+\mathbf A(\mathbf x_0-\boldsymbol m_0)$ and $\boldsymbol\Sigma(1)=\boldsymbol\Sigma_1$, as required. For the flow $\phi_t$ above, finite differences recover the Jacobian exactly,
+
+$$
+\frac{\phi_t(\mathbf x_0 + \varepsilon \mathbf z) - \phi_t(\mathbf x_0)}{\varepsilon}
+\xrightarrow[\varepsilon\downarrow 0]{}
+Y(t) \mathbf z,
+\quad
+Y(t) = e^{t \mathbf L}.
+$$
+
+Consequently, the "wiggle" covariance propagated by $\phi_t$ matches the push‐forward covariance,
+
+\begin{align*}
+\operatorname{Cov}\left(\phi_t(\mathbf x_0 + \varepsilon \mathbf z) - \phi_t(\mathbf x_0)\right) & = \varepsilon^2 Y(t) \operatorname{Cov}(\mathbf z) Y(t)^T \\
+& = \varepsilon^2 Y(t) Y(t)^T, 
+\end{align*}
+
+which is the empirical counterpart of the theoretical $\boldsymbol \Sigma(t) = Y(t) \boldsymbol \Sigma_0 Y(t)^T$ (with $\boldsymbol \Sigma_0 = \mathbf I_d$ in the standard initialization). This places the finite-difference Jacobian-vector product in direct correspondence with our conditioning formulas and validates the perturbation analysis in the Gaussian case.

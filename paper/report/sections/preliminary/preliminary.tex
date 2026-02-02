@@ -1,0 +1,251 @@
+\section{Preliminaries}
+\label{sec:prelim}
+In this section, we introduce the flow matching framework and the fundamentals of causality. We will briefly introduce and explain these concepts then clearly state how we will use these frameworks. 
+
+\begin{comment}
+\subsection{Ordinary Differential Equations (ODEs)}
+Ordinary differential equations describe the evolution of deterministic continuous-time systems and form the foundation of many generative models. An ODE is formally expressed as,
+
+$$
+\frac{d\mathbf{x}(t)}{dt} = \mathbf{f}(\mathbf{x}(t), t), \quad \mathbf{x(0)} = \mathbf x_0,
+$$
+
+where $\mathbf{x}(t) \in \mathbb{R}^d$ represents the state at time $t$, $\mathbf{f}: \mathbb{R}^d \times [0,T] \mapsto \mathbb{R}^d$ is the velocity field guiding the evolution, and $\mathbf x_0$ is the initial condition. Solutions to this equation yield deterministic trajectories through state space.
+
+ODEs have gained prominence in deep learning through neural ODEs \cite{chen2019neural}, which parameterize the velocity field $\mathbf{f}$ using neural networks, allowing continuous-depth transformations between input and output spaces. Here we do not explore further with neural ODEs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{figs/result/create_figs/deterministic_ode.png}
+    \caption{Two ODE examples; An ODE yields a single deterministic trajectory for each initial condition.}
+    \label{fig:ode_comparison}
+\end{figure}
+
+\subsection{Stochastic Differential Equations (SDEs)}
+SDEs extend ODEs by incorporating stochasticity, making them powerful tools for modeling systems with uncertainty. An SDE is defined as,
+
+$$
+d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t), t) \ dt + \mathbf{L}(\mathbf{x}(t), t)d \ \beta(t),
+$$
+
+where $\mathbf{f}(\mathbf{x}(t), t)$ is the drift term (deterministic component), $\mathbf{L}(\mathbf{x}(t), t)$ is the diffusion coefficient controlling stochasticity, and $\beta(t)$ is a standard Wiener process (Brownian motion).
+
+Unlike ODEs, SDE solutions produce distributions of possible trajectories rather than single paths, which makes them especially suitable for modeling generative processes that transform between probability distributions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/result/create_figs/stochastic_sde.png}
+    \caption{SDE examples; An SDE produces a distribution of possible trajectories from the same starting point, reflecting its inherent stochasticity.}
+    \label{fig:sde_comparison}
+\end{figure}
+
+\subsection{Itô Calculus and Probability Distributions of SDEs}
+To better understand the nature of how SDEs differ from regular ODEs, we present the most fundamental concepts to understand stochastic calculus. 
+
+Suppose $x(t)$ is a scalar Itô process that obeys the SDE~\cite{øksendal2010stochastic}
+
+$$
+dx(t) = f(x(t), t) \ dt + L(x(t), t) \ d\beta(t).
+$$
+
+The scalar function $\phi(x(t), t) :\mathbb R\times \mathbb R\to \mathbb R$ can then be described by the SDE
+
+$$
+d \phi(x(t), t) = \frac{\partial \phi}{\partial t} dt + \frac{\partial \phi}{\partial x} dx(t) + \frac{1}{2} \frac{\partial^2 \phi}{\partial x^2} L(x(t))^2 dt.
+$$
+
+In the multi-dimensional case~\cite{øksendal2010stochastic} this is given as
+
+$$
+d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t), t) \ dt + \mathbf{L}(\mathbf{x}(t), t) \ d\boldsymbol \beta(t),
+$$
+
+with dimensions $\mathbf{x}, \mathbf{f}\in \mathbb R^{n}$, $\mathbf{L}\in \mathbb R^{n\times m}$ and where $\boldsymbol \beta(t)\in \mathbb R^{m}$, that is, independent Brownian elements.
+
+Under suitable regularity, the function $\phi(\mathbf{x}(t), t):\mathbb R^{n}\times \mathbb R\to \mathbb R^n$ satisfies,
+
+$$
+d \phi(\mathbf{x}(t), t) = \frac{\partial \phi}{\partial t} dt + (\nabla_{\mathbf{x}} \phi)^T d \mathbf{x}(t) + \frac{1}{2} tr \{\mathbf{L}^T \nabla_{\mathbf{x}} \nabla_{\mathbf{x}}^T \phi \mathbf{L} \} \ dt.
+$$
+
+The Fokker-Planck-Kolmogorov equation describes the evolution of the probability distribution of a stochastic process over time. The probability density $p(x, t)$ of the solution of the SDE~\cite{øksendal2010stochastic},
+
+$$
+dx(t) = f(x(t), t) \ dt + L(x(t), t) \ d\beta(t),
+$$
+
+solves the partial differential equation,
+
+$$
+\frac{\partial p(x, t)}{\partial t} = - \frac{\partial}{\partial x} [f(x, t) p(x, t)] + \frac{1}{2} \frac{\partial^2}{\partial x^2} \left[ L(x, t)^2 p(x, t) \right].
+$$
+
+Or, in the multi-dimensional case, the probability density $p(\mathbf{x}, t)$ of the solution of the SDE~\cite{øksendal2010stochastic},
+
+$$
+d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t), t) \ dt + \mathbf{L}(\mathbf{x}(t), t) \ d \beta(t),
+$$
+
+solves the partial differential equation,
+
+$$
+\frac{\partial p(\mathbf{x}, t)}{\partial t} = - \sum_i \frac{\partial}{\partial x_i} [f_i(\mathbf{x}, t) p(\mathbf{x}, t)] + \frac{1}{2} \sum_{i,j} \frac{\partial^2}{\partial x_i \partial x_j} \left[ [\mathbf{L}(\mathbf{x}, t) \mathbf{L}^T(\mathbf{x}, t)]_{ij} p(\mathbf{x}, t) \right].
+$$
+
+We will not prove these theorems and equations, since they both are foundational results in the field of stochastic calculus. These two concepts are the tools to develop and understand novel deep diffusion models, we invite the reader to further read about stochastic calculus if needed~\cite{øksendal2010stochastic}.
+
+\subsection{Denoising Diffusion Probabilistic Models (DDPM)}
+DDPMs \cite{ho2020denoising} implement a generative process by gradually adding noise to data samples and then learning to reverse this process. The forward (noising) process is defined as a Markov chain that incrementally adds Gaussian noise,
+
+$$
+q(\mathbf{x}_t | \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_t; \sqrt{1-\beta_t}\mathbf{x}_{t-1}, \beta_t\mathbf{I}_d),
+$$
+
+where $\beta_t \in (0,1)$ is a noise schedule that controls the variance at each step. This process can be reparameterized to allow sampling directly from any timestep,
+
+$$
+q(\mathbf{x}_t | \mathbf{x}_0) = \mathcal{N}(\mathbf{x}_t; \sqrt{\bar{\alpha}_t}\mathbf{x}_0, (1-\bar{\alpha}_t)\mathbf{I}_d),\quad \bar{\alpha}_t = \prod_{s=1}^{t}(1-\beta_s).
+$$
+
+The reverse (denoising) process begins with a sample $\mathbf{x}_T \sim \mathcal{N}(0, \mathbf{I}_d)$ and progressively denoises it through learned distributions $p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t)$. This conditional is also Gaussian,
+
+$$
+p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t) = \mathcal{N}(\mathbf{x}_{t-1}; \boldsymbol \mu_\theta(x_t, t), \boldsymbol \Sigma_\theta(x_t, t)),
+$$
+
+where ($\boldsymbol \mu_\theta, \boldsymbol \Sigma_\theta$) is parameterized by a neural network that predicts either the noise component or the clean data directly.
+
+\subsubsection{Score-Based Generative Models}
+Score-based models \cite{song2021scorebased, song2020generative} approach generative modeling by directly estimating the score function $\nabla_\mathbf{x} \log p(\mathbf{x})$ of the data distribution. This is accomplished by training a model to predict the score at various noise levels,
+
+$$
+\mathbb{E}_{p_{\sigma}(\mathbf{x})}\left[ \left\| \mathbf{s}_\theta(\mathbf{x}, \sigma) - \nabla_\mathbf{x} \log p_{\sigma}(\mathbf{x}) \right\|^2 \right],
+$$
+
+where $p_{\sigma}(\mathbf{x}) = \int p_{\text{data}}(y) \mathcal{N}(\mathbf{x}; y, \sigma^2 \mathbf{I}) \ dy$ is the noised data distribution and $\mathbf{s}_\theta(\mathbf{x}, \sigma)$ is our neural network trying to predict this.
+
+To generate samples, score-based models employ Langevin dynamics ~\cite{ho2020denoising}, a stochastic process that asymptotically samples from a distribution using its score,
+
+$$
+\mathbf{x}_{i+1} = \mathbf{x}_i + \varepsilon \nabla_\mathbf{x} \log p(\mathbf{x}_i) + \sqrt{2\varepsilon} z_i, \quad z_i \sim \mathcal{N}(0, \mathbf{I}_d),
+$$
+
+where $\varepsilon>0$ is a small step size.
+
+We note here that there are other dynamics and methods for generating samples with score-based models, but we do not present these here.
+
+\subsection{Continuous-Time Formulation}
+Both DDPM and score-based approaches can be unified under a continuous-time framework using SDEs \cite{song2021scorebased}. The forward (noising) process can be described by the SDE,
+
+$$
+d\mathbf{x}(t) = \mathbf{f}(\mathbf{x}(t), t) \ dt + \mathbf{L}(t) \ d\beta(t),
+$$
+
+and the corresponding reverse-time SDE,
+
+\begin{equation}
+d\mathbf{x}(t) = \left[\mathbf{f}(\mathbf{x}(t), t)) - \mathbf{L}(t) ^2 \nabla_\mathbf{x} \log p_t(\mathbf{x}(t))\right] dt + \mathbf{L}(t)  \ d\bar{\beta},
+\end{equation}
+
+where $\bar{\beta}$ is a standard Brownian motion running backward in time, and $\nabla_\mathbf{x} \log p_t(\mathbf{x}(t))$ is the score of the marginal distribution at time $t$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/result/create_figs/diffusion_models_overview.png}
+    \caption{Diffusion model process; (Top) The forward process gradually adds noise to data samples until they approach a standard Gaussian distribution. (Bottom) The learned reverse process progressively removes noise to transform random Gaussian samples into samples from the data distribution.}
+    \label{fig:diffusion_process}
+\end{figure}
+\end{comment}
+
+\subsection{Flow Matching} \label{subsec:flow_matching}
+
+Flow matching \cite{lipman2023flow} provides an elegant framework for learning continuous normalizing flows by directly modeling the velocity field that transports one distribution to another. Unlike diffusion models that rely on explicit noise schedules, flow matching learns a deterministic ODE that maps between distributions.
+
+Given a source distribution $p_{\text{init}}$ (typically standard Gaussian noise) and a target distribution $p_{\text{data}}$, flow matching aims to learn a time-dependent vector field $\boldsymbol{v}_\theta(\mathbf{x}(t), t)$ that guides the transformation from samples of $p_{\text{init}}$ to samples of $p_{\text{data}}$.
+
+Let $\boldsymbol\phi_t: \mathbb{R}^d \mapsto \mathbb{R}^d$ be a continuous family of maps with $\boldsymbol\phi_0 = \mathbf{I}_d$ and $\boldsymbol\phi_1$ pushing $p_{\text{init}}$ to $p_{\text{data}}$. The transport ODE is given by,
+
+\begin{equation*}
+\label{eq:flow_matching_ODE}
+\frac{d}{dt}\boldsymbol\phi_t(\mathbf{x}) = \mathbf  v_t( \boldsymbol\phi_t(\mathbf{x})), \quad \boldsymbol\phi_0 = \mathbf{I}_d,
+\end{equation*}
+
+where $\boldsymbol v_t$ is a time-dependent vector field.
+
+For linear interpolation between samples $\boldsymbol x_0 \sim p_{\text{init}}$ and $\boldsymbol x_1 \sim p_{\text{data}}$, defined as $\boldsymbol x_t = (1-t)\boldsymbol x_0 + t\boldsymbol x_1$, the optimal vector field can be shown to be~\cite{lipman2023flow},
+
+\begin{equation}
+\label{eq:optimal_flow}
+\boldsymbol u(\mathbf{x_t}, t) = \mathbb{E}_{p(\boldsymbol x_0, \boldsymbol x_1|\mathbf{x}_t)}[\boldsymbol x_1 - \boldsymbol x_0],
+\end{equation}
+
+which is the conditional expectation of the difference between the paired source and target points (i.e., the trajectory from noise to data), given the interpolated point $\mathbf{x}_t$. The flow matching objective is then to learn a parameterized velocity field $\mathbf v_\theta$ that approximates this optimal field,
+
+\begin{equation*}
+\mathcal{L}(\theta) = \mathbb{E}_{t, \boldsymbol x_0, \boldsymbol x_1}\left[ \left\| \mathbf v_\theta(\mathbf{x}_t, t) - (\boldsymbol x_1 - \boldsymbol x_0) \right\|^2 \right].
+\end{equation*}
+
+Once trained, the model can be used to generate samples by integrating the learned ODE starting from noise samples.
+
+\begin{comment}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figs/result/create_figs/flow_matching_overview.png}
+    \caption{Flow Matching concept; (Top) The transformation from the initial distribution $p_{\text{init}}$ to the target distribution $p_{\text{data}}$. (Bottom): The velocity field evolution overtime and at time $t=0$ and $t=1$ the distributions.}
+    \label{fig:flow_matching}
+\end{figure*}
+\end{comment}
+
+\subsection{Fundamentals of Causality}
+Causality extends beyond simple statistical association, providing a framework for understanding how variables influence each other. Although correlation identifies patterns of co-occurrence, causation establishes directional relationships where changes in one variable directly produce changes in another \cite{pearl2009causality}.
+
+In the context of generative models, causality offers a lens through which we can interpret the relationship between generated features. When a generative process transforms noise into data, we can ask \emph{which latent dimensions causally influence generated features}.
+
+\subsubsection{Pearl's Ladder of Causation}
+Pearl's causality framework consists of three levels of increasing complexity:
+\cite{pearl2018book}
+
+\begin{enumerate}
+    \itemsep0em
+    \item
+    \textbf{Association (Seeing)}: The ability to recognize patterns and correlations in observational data.
+    $P(y|x)$ -- "What is the probability of observing feature $Y$ given feature $X$"
+    \item \textbf{Intervention (Doing)}: The ability to predict the effect of deliberate actions or interventions.
+   $P(y|\mathrm{do}(x))$ -- What is the probability of the observing feature $Y$ given a specific condition on $X$.
+   \item \textbf{Counterfactuals (Imagining)}: The ability to reason about what would have happened under different circumstances.
+   $P(y_x | x', y')$ -- "What would feature $Y$ have been if feature $X$ had been $x$, given that I observed $X=x'$ and $Y=y'$?"
+\end{enumerate}
+
+Our analysis focuses primarily on the first and second levels as we examine how (small) perturbations in latent space propagate through the generative model affecting the joint output distribution. Here, we are interested in using Pearl's ladder specifically on the output features, i.e., intervening and observing how output features change and affect each other. We will now introduce the formal definition of intervention that will be used.
+
+\subsubsection{Formal Definition of Intervention}
+\label{subsubsec:intervention}
+
+Let $\mathcal{M} = (\mathbf{U}, \mathbf{V}, \mathcal{F}, P(\mathbf{U}))$ be a structural causal model (SCM) where:
+
+\begin{itemize}
+    \itemsep0em
+    \item $\mathbf{U}$ is a set of latent (exogenous) variables with joint distribution $P(\mathbf{U})$.
+    
+    \item $\mathbf{V} = \{V_1, \dots, V_n\}$ is a set of observed (endogenous) variables.
+    
+    \item $\mathcal{F} = \{f_i\}$ is a collection of structural assignments $V_i = f_i\bigl(\mathrm{pa}(V_i), U_i\bigr)$, with $\mathrm{pa}(V_i)\subseteq \mathbf{V}\setminus\{V_i\}$.
+\end{itemize}
+
+The \emph{intervention} $\mathrm{do}(X = x')$ on a variable $X \in \mathbf V$ produces a modified model,
+
+$$
+\mathcal{M}_{\mathrm{do}(X = x')} = \left(\mathbf{U}, \mathbf{V}, \mathcal{F}_{\mathrm{do}(X = x')}, P(\mathbf{U})\right),
+$$
+
+where the original assignment for $X$ is replaced by the constant assignment $X := x'$. All other structural equations remain unchanged.
+
+The \emph{interventional distribution} of any variable $Y\in\mathbf V$ is then defined as,
+
+$$
+P_{\mathcal{M}}\left(Y \mid \mathrm{do}(X = x')\right) := P_{\mathcal{M}_{\mathrm{do}(X = x')}}(Y).
+$$
+
+In essence, by keeping one latent variable fixed and keeping the rest of the model unchanged (the $\mathrm{do}(\cdot)$ operator). By the assumption that our data distribution follows an SCM, which can be implicitly learned in a probabilistic data modeling proxy, such as a generative model, causal questions can be asked.
+
+We will henceforth assume that our data distributions follow an (unknown) underlying SCM. Thus, the SCM data generation process can be implicitly learned in a probabilistic data modeling proxy, in our case, a flow matching model. Ultimately, if one can (partially) recover the SCM, the causal structure of the model (and, by extension, the data) can be explored and understood via the flow matching model.

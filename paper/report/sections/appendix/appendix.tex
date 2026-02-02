@@ -1,0 +1,86 @@
+\appendix
+% \section{Appendix}
+\input{report/sections/appendix/code}
+\input{report/sections/appendix/derivations}
+\input{report/sections/appendix/diagnostics}
+\label{appendix:}
+\begin{comment}
+\subsection{Diffeomorphism}
+We consider the continuous-time flow that transports the distribution,
+
+$$
+x(0)\sim\mathcal{N}(0,3),
+$$
+
+at $t=0$ to,
+
+$$
+x(1)\sim\mathcal{N}(0,1),
+$$
+
+at $t=1$.
+
+To find support claiming that our “wiggle” represents a derivative, we first observe that the flow map
+
+$$
+\varphi_t: \mathbb{R} \mapsto \mathbb{R},\quad x_0 \mapsto x(t; x_0)
+$$
+
+is the unique solution operator of the ODE
+
+$$
+\frac{dx}{dt}=f(x,t), \quad x(0)=x_0.
+$$
+
+Equivalently, one shows that the solution has the form
+
+$$
+\varphi_t(x_0) = x_0\exp \left(\int_0^t A(s) \ ds \right).
+$$
+
+To derive the integral in closed form, note that
+
+$$
+A(s) = \frac{\frac{s}{3(1-s)^2 + s^2} - 1}{1-s} = \frac{d}{ds}\left[\frac{1}{2} \ln \left(3(1-s)^2 + s^2\right)\right]
+$$
+
+since differentiating gives
+
+$$
+\frac{d}{ds}\ln\left(3(1-s)^2 + s^2\right) = \frac{6(s-1) + 2s}{3(1-s)^2 + s^2} = 2 A(s).
+$$
+
+Therefore
+
+$$
+\int_0^t A(s) \ ds = \frac{1}{2} \ln\left(3(1-t)^2 + t^2\right) - \frac{1}{2} \ln(3) = \frac{1}{2} \ln \frac{3(1-t)^2 + t^2}{3}.
+$$
+
+Substitution yields the closed-form
+
+$$
+\varphi_t(x_0) = x_0 \sqrt{\frac{3(1-t)^2 + t^2}{3}}.
+$$
+
+Because this map is smooth with a smooth inverse for each $t<1$, $\varphi_t$ is a diffeomorphism.  Its derivative
+
+$$
+Y(t) = \frac{\partial}{\partial x_0} \varphi_t(x_0) = \exp\left(\int_0^t A(s) \ ds\right) = \sqrt{\frac{3(1-t)^2 + t^2}{3}}
+$$
+
+quantifies sensitivity to initial conditions.  In practice, we perturb $x_0$ by $\varepsilon$ and compute
+
+$$
+\delta x(t) = \varphi_t(x_0+\varepsilon) - \varphi_t(x_0), \quad \frac{\delta x(t)}{\varepsilon} \approx Y(t).
+$$
+
+Taking the limit as $\varepsilon\to0$ recovers exactly $Y(t)$, confirming that our finite-difference “wiggle” matches the true derivative of the diffeomorphism.
+
+Furthermore, pushing forward the initial density $\rho_0(x)=\mathcal{N}(0,3)$ gives
+
+$$
+\rho_t(x) = \rho_0\left(\varphi_t^{-1}(x)\right) \left|\tfrac{d}{dx}\varphi_t^{-1}(x)\right| = \frac{1}{\sqrt{2\pi3} \ Y(t)}\exp\left(-\frac{x^2}{2\,3\,Y(t)^2}\right) = \mathcal{N}(0,3Y(t)^2)
+$$
+
+with $3Y(t)^2=3(1-t)^2+t^2$, which at $t=1$ reduces to variance $1$, i.e., $\mathcal{N}(0,1)$.  This density check, alongside the Jacobian agreement, establishes that the flow is a probability-preserving diffeomorphism.
+\end{comment}

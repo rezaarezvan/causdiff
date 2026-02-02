@@ -1,0 +1,26 @@
+\subsection{Wiggling in Flow Matching Models}
+\label{subsec:Wiggle in models}
+
+Given the foundations laid out so far, it is only natural to study the effect of small perturbations in the starting point for flow matching models and see the effects. Let $\mathbf{f}_\theta: \mathbb{R}^d \mapsto \mathbb{R}^d$ denote a (trained) flow matching model that maps a sample $\mathbf{x}_0 \sim p_{\text{init}}$ to a generated sample $\mathbf{\hat{x}_1} = \mathbf{f}_\theta(\mathbf{x}_0) \sim p_{\text{data}}$ by integrating the learned velocity field $\mathbf{v}_\theta$. By Taylor expansion we know that,
+
+$$
+\mathbf{f}_{\theta}(\mathbf{x}_0 + \varepsilon \mathbf{z}) \approx \mathbf{f}_{\theta}(\mathbf{x}_0) + \varepsilon \mathbf{J}_{\mathbf{f}_{\theta}}(\mathbf{x}_0) \mathbf{z}, \quad \mathbf{z} \sim \mathcal{N}(0, \mathbf{I}_d), \ \varepsilon > 0
+$$
+
+where,
+$$
+\mathbf{J}_{\mathbf{f}_{\theta}}(\mathbf{x}_0) = \frac{\partial}{\partial \mathbf {x}_0} \mathbf{f}_{\theta}(\mathbf{x}_0)
+$$
+
+is the Jacobian with respect to the input. 
+
+Equivalently, the finite‐difference approximation can be used,
+
+\begin{equation}
+    \label{eq:jacobian_approx}
+    \mathbf{J}_{\mathbf{f}_{\theta}}(\mathbf{x}_0) \mathbf{z} \approx \frac{\mathbf{f}_{\theta}(\mathbf{x}_0 + \varepsilon \mathbf{z}) - \mathbf{f}_{\theta}(\mathbf{x}_0)}{\varepsilon},
+\end{equation}
+
+which is a Jacobian-vector product for the random direction $\mathbf{z}$.
+
+In practice, we use finite differences with small $\varepsilon$ and validate the stability of the estimate by comparing to automatic-differentiation JVPs and by sweeping $\varepsilon$ (Appendix~\\ref{app:diagnostics}).

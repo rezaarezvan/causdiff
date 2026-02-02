@@ -1,0 +1,36 @@
+\subsection{Discovering Attribute Relations via Perturbations}
+\label{sec:jvp_attr}
+So far we have discussed Jacobian-vector products for flow models in pixel space. However, for perceptual data, pixel-level dependencies are rarely meaningful for causal questions. In these cases, one needs a classifier to map generated images to semantic attributes. The pixel-space JVP only captures pixel correlations, not attribute-level dependencies. Thus, the attribute-level Jacobian-vector product becomes relevant to study.
+We denote a (well-trained) classifier model $\mathbf{C}_{\theta} : \mathbb{R}^d \mapsto \mathbb{R}^n$, where $n$ denotes the number of attributes (we use logits in our experiments). Similar to Equation~\eqref{eq:jacobian_approx}, we can compute the Jacobian-vector product for the composed classifier-flow map as,
+%
+$$
+\mathbf{J}_{\mathbf{C}_\theta \circ \mathbf{f}_\theta}(\mathbf{x}_0) \mathbf{z} \approx  \frac{\mathbf{C}_{\theta}(\mathbf{f}_\theta(\mathbf{x}_0 + \varepsilon\mathbf{z})) - \mathbf{C}_{\theta}(\mathbf{f}_\theta(\mathbf{x}_0))}{\varepsilon}, \quad \mathbf{z}\sim\mathcal{N}(0,\mathbf{I}_d).
+$$
+%
+Let $\Delta \mathbf{y}(\mathbf{x}_0,\mathbf{z})$ denote the right-hand side above. By aggregating over many samples we estimate the second-moment matrix,
+
+$$
+\mathbf{S}(\mathcal{D}) = \mathbb{E}_{\mathbf{x}_0,\mathbf{z}} \left[\Delta \mathbf{y} \, \Delta \mathbf{y}^T \right].
+$$
+
+When we report a correlation matrix, we use the normalized version
+$
+\mathrm{Corr}(\mathcal{D}) = \mathbf{D}^{-1/2}\mathbf{S}(\mathcal{D})\mathbf{D}^{-1/2},
+$
+where $\mathbf{D}=\mathrm{diag}(\mathbf{S}(\mathcal{D}))$.
+
+\begin{comment}
+\subsubsection{Pitfalls and Cautionary with Classifiers}
+
+When working with derivatives (or, in our case, small perturbations), dealing with discrete data yields absolute changes (i.e., from one discrete point to another). Thus, a meaningful representation of change is hard to observe.
+
+To overcome this, one has to make sure the (output) data can be represented continuously, in a machine learning setting this usually means using the softmax function $\sigma: \mathbb{R}^K \mapsto (0, 1)^K$,
+
+$$
+\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}.
+$$
+
+Note that using a classifier for these cases has an implicit bias. Now, small perturbations in latent space translate to changes in the models prediction and classification of attributes. This entanglement is not something that we further study, but we acknowledge this implicit bias that can arise. 
+
+However, we also note that this is only the case if we cannot directly observe the desired output. In other (or simpler) cases, one can directly observe meaningful information from the flow matching model.
+\end{comment}

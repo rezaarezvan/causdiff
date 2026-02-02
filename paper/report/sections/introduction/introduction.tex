@@ -1,0 +1,23 @@
+\section{Introduction} 
+\label{sec:introduction}
+Diffusion and score-based models have become powerful generative frameworks, transforming simple distributions into complex data across domains~\cite{ho2020denoising, song2021scorebased}. Flow matching offers a deterministic alternative by learning a velocity field that transports a base distribution to data~\cite{lipman2023flow, albergo2023building}. Despite their empirical success, the internal dependency structure of these models remains difficult to interpret.
+
+We study how small latent perturbations propagate through flow matching models and show that Jacobian-vector products (JVPs) provide a practical estimator of dependency structure in generated features. Our analysis connects conditional expectations, local linearization, and the geometry of learned flows. While this perspective is causally motivated, we explicitly distinguish conditioning from formal interventions in the sense of Pearl~\cite{pearl2009causality}.
+
+Specifically, our contributions are:
+
+\begin{itemize}
+    \itemsep-0.1em 
+    \item Derive closed-form drifts and Jacobians for Gaussian and mixture-of-Gaussian targets, revealing local affine structure in flow matching.
+    \item Introduce a JVP-based estimator for dependency structure and validate it on synthetic benchmarks and MNIST pixel correlations.
+    \item Apply the method to CelebA attributes and show that conditioning on small classifier-Jacobian norms reduces correlations in a way consistent with a common-cause hypothesis, while clarifying that this is not a $\mathrm{do}$-intervention.
+\end{itemize}
+
+\begin{comment}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/result/create_figs/diffusion_causality_overview.png}
+    \caption{Illustration of diffusion/flow processes and causal relationships. Latent perturbations (left) -- here $z_1$ affects the "Shape" property and $z_2$ affects the "Texture" property, respectively and both together affect the "Color" property -- propagate through the generative flow (middle), revealing causal structures in the generated data (right).}
+    \label{fig:diffusion_causality}
+\end{figure*}
+\end{comment}

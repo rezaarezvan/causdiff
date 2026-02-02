@@ -1,0 +1,22 @@
+\section{Additional Diagnostics}
+\label{app:diagnostics}
+We include auxiliary experiments that compare finite-difference and automatic-differentiation Jacobian-vector products and study sensitivity to the perturbation scale $\varepsilon$.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{result/compare_integration_and_derivatives/derivative_method_comparison.png}
+        \caption{Finite differences vs. JVP via automatic differentiation (example).}
+        \label{fig:derivative_method_comparison}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{result/compare_integration_and_derivatives/epsilon_sensitivity.png}
+        \caption{Sensitivity of finite differences to $\varepsilon$.}
+        \label{fig:epsilon_sensitivity}
+    \end{subfigure}
+    \caption{Additional diagnostics for Jacobian-vector estimation.}
+    \label{fig:diagnostics}
+\end{figure}

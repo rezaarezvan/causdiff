@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[final]{neurips_2022}
+\usepackage{makecell}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage[backend=bibtex, style=ieee, citestyle=numeric-comp]{biblatex}
+\addbibresource{references.bib}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true}
+
+\newcommand{\remark}[1]{{\color{red}{{[#1]}}}}
+\newcommand{\pointe}{Point$\cdot$E}
+\newcommand{\shortcite}[1]{[\citenum{#1}]}
+\newcommand{\namecite}[1]{\citeauthor{#1} [\citenum{#1}]}
+\newcommand{\vcentered}[1]{\begin{tabular}{l} #1 \end{tabular}}
+\providecommand{\keywords}[1]{%
+  \small  
+  \textbf{\textit{Keywords---}} #1
+}
+
+
+\title{Causality--$\Delta$: Jacobian-Based Dependency Analysis in Flow Matching Models} % \small \\ Research Project about Deep Diffusion Models and Causality \small \\ Report for MVE405 -- Individual project in Mathematics and Mathematical statistics}
+
+\makeatletter
+\newcommand{\printfnsymbol}[1]{%
+  \textsuperscript{\@fnsymbol{#1}}%
+}
+\makeatother
+
+\author{Reza Rezvan\\ Chalmers University of Technology\\ \And Gustav Gille\\ Chalmers University of Technology\\ \And Moritz Schauer\\ Chalmers University of Technology and University of Gothenburg\\ \And Richard Torkar\\ Chalmers University of Technology and University of Gothenburg\\ \And \\ \texttt{\{rezvan, gustavgi, smoritz, torkarr\}@chalmers.se}
+}
+
+\begin{document}
+\maketitle
+
+
+\input{report/sections/abstract/abstract}
+\input{report/sections/introduction/introduction}
+\input{report/sections/related_work/related_work}
+\input{report/sections/preliminary/preliminary}
+\input{report/sections/background/background}
+\input{report/sections/method/method}
+\input{report/sections/result/result}
+\input{report/sections/conclusion/conclusion}
+\input{report/sections/acknowledgement/acknowledgement}
+\clearpage
+\input{report/sections/appendix/appendix}
+
+\printbibliography
+\end{document}

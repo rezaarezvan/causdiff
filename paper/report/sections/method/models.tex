@@ -1,0 +1,50 @@
+\subsection{Models \& Architectures}
+\label{subsec:Models}
+
+\begin{table}[h]
+  \centering
+  \caption{Architectural configurations of the UNet-based models.}
+  \label{tab:models}
+  \resizebox{\columnwidth}{!}{
+  \begin{tabular}{lcccccc}
+    \toprule
+    \textbf{Model} & \textbf{Input} & \textbf{Output} & \textbf{Time Emb. Dim} & \textbf{Base Ch.} & \textbf{Channel Mult.} & \textbf{Attention Res.} \\
+    \midrule
+    FlowUNet (baseline)  
+      & $C = 1$ 
+      & $C = 1$ 
+      & 256 
+      & 64 
+      & (1, 2, 4, 8, 16) 
+      & – \\
+    \quad \textit{(bilinear up?)} 
+      & – & – & – & \multicolumn{1}{c}{yes / no} & – & – \\
+    \midrule
+    FlowUNet (attention)   
+      & $C = 3$ 
+      & $C = 3$ 
+      & 256 
+      & 64 
+      & (1, 1, 2, 2, 4) 
+      & (8, 16, 32) \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Training hyperparameters used in our experiments.}
+  \label{tab:hyperparams}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Hyperparameter}   & \textbf{Default / Value} \\
+    \midrule
+    Training steps           & 400\,001 \\
+    Batch size               & 128 \\
+    Learning rate (AdamW)    & $2\times10^{-4}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Since the introduction of the UNet architecture by \cite{ronneberger2015}, many generative models have adapted this architecture. Thus, the UNet-like architecture was a natural choice for doing practical experiments. The tables above are the baseline architecture and hyperparameters that have been used in all experiments, and in the cases that deviate, we refer to the code \ref{app:Code}. For the classifier, a ResNet50 model \cite{resnet50} was trained and used in which the last layer was fine-tuned on the respective datasets. Both implementations of the architectures can be found in the code at \ref{app:Code}.

@@ -1,0 +1,343 @@
+\begin{comment}
+\subsection{Linear Maps and Their Properties}
+\label{Linear maps and their properties}
+Let $\mathbf z \sim \mathcal{N}(0, \mathbf{I}_d) \in \mathbb{R}^d$ and let $\mathbf A \in \mathbb{R}^{m \times  d}$ be a fixed matrix (i.e., a linear map). We can define,
+
+$$
+\label{eq:map}
+\mathbf x = \mathbf A\mathbf z \in \mathbb{R}^m.
+$$
+
+Because $\bf x$ is an affine transformation of a Gaussian, $\bf x$ must also be Gaussian with distribution,
+
+$$
+\mathbf x \sim \mathcal{N}(\mathbf 0, \mathbf A \mathbf A^T).
+$$
+
+To see how $\bf z$ changes under a small perturbation of $\bf z$, let $\mathbf v \in \mathbb{R}^d$ be a Gaussian direction.
+
+For a small scalar $\varepsilon>0$ define,
+
+$$
+\mathbf z_{\varepsilon} := \mathbf z + \varepsilon \bf v.
+$$
+
+The corresponding value $\bf x$  is,
+
+$$
+\mathbf x_{\varepsilon} = \mathbf A \mathbf z_{\varepsilon} = \mathbf A( \mathbf z + \varepsilon \mathbf v) = \mathbf A\mathbf z + \varepsilon \mathbf A \mathbf v.
+$$
+
+Subtracting $\bf x$ from $\bf x_{\varepsilon}$ gives,
+
+$$
+\Delta \mathbf{x} := \mathbf x_{\varepsilon} - \mathbf x = \varepsilon \mathbf A\mathbf v \implies \mathbf A\mathbf v= \frac{\mathbf x_{\varepsilon} - \mathbf x}{\varepsilon}.
+$$
+
+In other words, $\mathbf A\mathbf v$ is the directional derivative of $\mathbf x$ with respect to $\mathbf x$ in the direction $\mathbf  v$.
+
+Equivalently, in this linear case, $\mathbf  A$ is the Jacobian of the map $\mathbf z \mapsto \mathbf A \mathbf z$.
+
+Since $\mathbf  v$ is also drawn from a (standard) Gaussian distribution $\mathbf v \sim \mathcal{N}(0, \mathbf{I}_d)$, $\mathbf A\mathbf v$ has mean 0 and covariance $\mathbf A\mathbf A^T$,
+
+\begin{align*}
+\mathbb{E}[\mathbf A\mathbf v] & = \mathbf A \ \mathbb{E}[\mathbf v] = \mathbf A \cdot 0 = 0, \\
+\mathrm{Cov}(\mathbf A\mathbf v) & = \mathbf A \ \mathrm{Cov}(\mathbf v) \mathbf  A^T = \mathbf A \mathbf{I}_d\mathbf{I}_d ^T \mathbf A^T =\mathbf  A\mathbf A^T.
+\end{align*}
+
+Thus, the "wiggle" in $\mathbf  x$ due to "wiggling" $\mathbf z$ in a random direction $\mathbf v$, is also Gaussian, with precisely the same covariance $\mathbf A\mathbf A^T$ (and mean 0) as $\mathbf x$ itself.
+
+Because the transformation is linear, the Jacobian is constant and equal to $\mathbf A$.
+Consequently, any small perturbations in $\mathbf{z}$ directly translates via the same linear map,
+
+$$
+\mathbf z_{\varepsilon} = \mathbf z + \varepsilon \mathbf v \quad \Rightarrow \quad \mathbf x_{\varepsilon} = \mathbf A(\mathbf z + \varepsilon \mathbf v) = \mathbf x + \varepsilon \mathbf A\mathbf v.
+$$
+
+The "wiggle" $\mathbf A\mathbf v$ accurately reflect the change in $\mathbf x$ and since $\mathbf  A$ is constant, the local linear approximation (i.e., the Jacobian) correctly recovers the covariance of $\mathbf  x$, $\mathbf A\mathbf A^T$.
+
+Now, choose one row of $\mathbf A$ and write it as the column vector $\mathbf a \in \mathbb R^{d}$ (i.e.\ the transpose of the $k$‑th row of $\mathbf A$).
+
+The corresponding scalar component of $\mathbf x$ is,
+
+$$
+w = \langle \mathbf a,\mathbf z \rangle = \mathbf a^{T}\mathbf z \in \mathbb R.
+$$
+
+Likewise, the directional derivative of $w$ in the direction $\mathbf v$ is,
+
+$$
+\langle \mathbf a, \mathbf v \rangle = \mathbf a^{T}\mathbf v.
+$$
+
+Consider the joint random vector,
+
+$$
+\mathbf y =
+\begin{bmatrix}
+\mathbf v \\
+\mathbf a^{T} \mathbf v
+\end{bmatrix}
+\in \mathbb R^{d+1},
+$$
+
+Because both blocks are linear in $\mathbf v$, $\mathbf y$ is Gaussian with mean $\mathbf 0$ and block covariance,
+
+$$
+\mathrm{Cov}(\mathbf y)
+=
+\begin{bmatrix}
+\mathbf I_d & \mathbf a \\
+\mathbf a^{T} & \Vert \mathbf a \Vert^{2}
+\end{bmatrix}.
+$$
+
+
+Conditioning on a zero directional derivative by considering the event $\langle \mathbf a,\mathbf v\rangle = 0$. For a jointly Gaussian vector, the conditional distribution remains Gaussian, with,
+
+$$
+\mathbb E[\mathbf v \mid \mathbf a^{T} \mathbf v = 0] = \mathbf 0,
+$$
+
+$$
+\mathrm{Cov}\bigl(\mathbf v \mid \mathbf a^{T}\mathbf v = 0\bigr)
+=
+\mathbf I_d - \frac{1}{\Vert \mathbf a \Vert^{2}}\,
+\mathbf a \mathbf a^{T}.
+$$
+
+The argument can be generalized by defining $\mathbf B \in \mathbb R^{p\times d}$ and $\mathbf w = \mathbf B\mathbf v$.
+
+Then,
+$$
+\begin{bmatrix}
+\mathbf v \\
+\mathbf w
+\end{bmatrix}
+\sim
+\mathcal N\Bigl(
+\mathbf 0,\;
+\begin{bmatrix}
+\mathbf I_d & \mathbf B^{T} \\
+\mathbf B & \mathbf B\mathbf B^{T}
+\end{bmatrix}
+\Bigr).
+$$
+
+Conditioning on $\mathbf w= \mathbf 0$ yields,
+
+$$
+\mathrm{Cov}\bigl(\mathbf v \mid \mathbf w = \mathbf 0\bigr)
+=
+\mathbf I_d -
+\mathbf B^{T}\bigl(\mathbf B\mathbf B^{T}\bigr)^{-1} \mathbf B.
+$$
+
+\subsubsection{Pitfall for Nonlinear Maps}
+For a nonlinear map however, the situation changes. Consider the $\mathbb R^2$ case for $\mathbf z \sim \mathcal N(0, \mathbf{I}_2)$ 
+
+$$
+\mathbf f(\mathbf z) = \mathbf z \mathbf  z^T,
+$$
+
+where the squaring is applied component-wise and $\mathbf z = (z_1, z_2)^T$.
+
+The Jacobian matrix of $\mathbf f$ at an arbitrary point $\mathbf z$ is,
+
+$$
+\mathbf J_\mathbf f(\mathbf z) = \begin{bmatrix}
+\frac{\partial f_1}{\partial z_1} & \frac{\partial f_1}{\partial z_2} \\
+\frac{\partial f_2}{\partial z_1} & \frac{\partial f_2}{\partial z_2}
+\end{bmatrix} = \begin{bmatrix}
+2z_1 & 0 \\
+0 & 2z_2
+\end{bmatrix}.
+$$
+
+Notice that at $\mathbf z = \mathbf 0_2$ the Jacobian becomes,
+
+$$
+\mathbf J_\mathbf f(\mathbf 0_2) = \begin{bmatrix}
+0 & 0 \\
+0 & 0
+\end{bmatrix},
+$$
+
+which implies that an infinitesimal perturbation around $\mathbf 0_2$ yields no change in $\mathbf f(\mathbf z)$ according to the local linear (first-order) approximation.
+
+In other words, if one "wiggles" $\mathbf z$ very close to $\mathbf 0_2$, the local derivative suggests that the covariance is also $\mathbf 0$. However, this local picture is misleading. Globally, if $\mathbf z \sim \mathcal{N}(0, \mathbf{I}_2)$, then each component $z_i$ has variance 1 and therefore,
+
+$$
+\mathbb{E}[z_i^2] = 1 \quad \text{ and } \quad \mathrm{Var}[z_i^2] = \mathbb{E}[z_i^4] - \mathbb{E}[z_i^2]^2 = 2.
+$$
+
+Thus, even though the Jacobian at $\mathbf z = 0$ vanishes, the push-forward distribution $\mathbf x = \mathbf f(\mathbf z) = (z_1^2, z_2^2)^T$ is non-Gaussian with a non-zero variance in each component.
+
+The key point is that the global structure of $\mathbf f(\mathbf z)$ depends on the full nonlinear behavior of $\mathbf{f}$, not just its local first-order approximation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figs/result/create_figs/linear_nonlinear_transformations.png}
+    \caption{Perturbation analysis; (Left) Linear case where perturbations propagate predictably according to the Jacobian. (Right) Nonlinear case where perturbations may lead to complex behaviors due to the changing Jacobian along the trajectory.}
+    \label{fig:perturbation_analysis}
+\end{figure}
+\end{comment}
+
+\subsection{Conditioning on Linear Interpolation of Linear Maps}
+Let $\mathbf z, \tilde{\mathbf z} \sim \mathcal{N}(0, \mathbf{I}_d)$ where $\mathbf z$ and $\tilde{\mathbf z}$ are independent.
+Let $\mathbf x = \mathbf A \tilde{\mathbf z}$ and define the interpolated vector as,
+
+$$
+\mathbf x_t = (1 - t) \mathbf z + t \mathbf x = (1 - t) \mathbf z + t \mathbf A \tilde{\mathbf z}.
+$$
+
+The pair $(\mathbf{x}, \mathbf{x}_t)$ is jointly Gaussian, so the conditional mean admits a closed form (derivation in Appendix~\ref{app:derivations}).
+In particular,
+
+$$
+\mathbb{E}[\mathbf{x} \mid \mathbf{x}_t] = t \mathbf{A} \mathbf{A}^T \left( (1 - t)^2 \mathbf{I}_d + t^2 \mathbf{A} \mathbf{A}^T \right)^{-1}\mathbf{x}_t.
+$$
+
+At the extremes $t = 0$ and $t = 1$, the conditional mean simplifies to $\mathbb{E}[\mathbf{x} \mid \mathbf{x}_0] = 0$ and $\mathbb{E}[\mathbf{x} \mid \mathbf{x}_1] = \mathbf{x}_t$, as expected.
+
+\subsubsection{Conditioning on arbitrary Gaussian}
+For $\mathbf{x}_0 \sim \mathcal{N}(0, \mathbf{I}_d)$ and $\mathbf{x}_1 \sim \mathcal{N}(0, \boldsymbol \Sigma)$, the conditional mean again has a closed form (Appendix~\ref{app:derivations}). Returning to flow matching (see Equation~\eqref{eq:optimal_flow}), if one assumes that our data distribution $\mathcal{D} \sim p_{\text{data}}$ is (approximately) Gaussian, then,
+
+\begin{equation*}
+\mathbf{v}(\mathbf{x}_t,t) % = \mathbb{E}[\mathbf{x}_1 - \mathbf{x}_0 | \mathbf{x}_t] 
+= (t \boldsymbol \Sigma - (1 - t) \mathbf{I}_d)[(1 - t)^2 \mathbf{I}_d + t^2 \boldsymbol \Sigma]^{-1} \mathbf{x}_t.
+\end{equation*}
+
+Thus, the flow matching ODE is,
+
+\begin{align*}
+\frac{d\mathbf{x}(t)}{dt} & = \mathbf{v}(\mathbf{x}_t, t) \\
+& = \mathbf{A}(t) \mathbf{x}_t,
+\end{align*}
+
+where $\mathbf{A}(t) = (t \boldsymbol \Sigma - (1 - t) \mathbf{I}_d)[(1 - t)^2 \mathbf{I}_d + t^2 \boldsymbol \Sigma]^{-1}$.
+
+\subsubsection{Conditioning beyond simple Gaussians}
+We now study beyond simple Gaussians distributions and derive how we can express and (again) connect back to flow matching using a mixture of Gaussians instead (derivation in Appendix~\ref{app:derivations}). Let,
+
+$$
+\mathbf{x}_0 \sim \mathcal N(\boldsymbol \mu_0, \boldsymbol \Sigma_0), \quad \mathbf{x}_1 \sim \sum_{k=1}^K \pi_k \ \mathcal N(\boldsymbol \mu_k, \boldsymbol \Sigma_k),
+$$
+
+with independent $\mathbf{x}_0, \mathbf{x}_1$, mixture weights $\pi_k > 0$, $\sum_k \pi_k = 1$, and $t \in [0,1]$. We again define the linear interpolation,
+
+$$
+\mathbf{x}_t = (1-t) \mathbf{x}_0 + t \mathbf{x}_1.
+$$
+
+Conditioning on the latent component $K=k$ yields,
+
+$$
+\mathbf{x}_t \mid (K=k) \sim \mathcal N\left((1-t) \boldsymbol \mu_0 + t \boldsymbol \mu_k, (1-t)^2 \boldsymbol \Sigma_0 + t^2 \boldsymbol \Sigma_k \right).
+$$
+
+By marginalizing over $K$ we get the time density,
+
+$$
+p_t(\mathbf{x}) = \sum_{k=1}^K \pi_k \ \mathcal N\left(\mathbf{x} | (1-t) \boldsymbol \mu_0 + t \boldsymbol \mu_k, (1-t)^2 \boldsymbol \Sigma_0 + t^2 \boldsymbol \Sigma_k \right).
+$$
+
+Let $\mathbf{x} = (\mathbf{x}_0, \mathbf{x}_1)$ and introduce an unobserved component label $K \in \{1, \ldots, K \}$. We know by Bayes' rule that, \vspace{-1em}
+
+\begin{equation}
+\label{eq:mixture_responsibilities}
+\begin{aligned}
+\gamma_k(\mathbf{x}_t,t) & \coloneqq Pr(K = k \mid \mathbf{x}_t) \\
+& = \frac{\pi_k \mathcal{N}(\mathbf{x}_t \mid \boldsymbol{\mu}_{t,k}, \boldsymbol{\Sigma}_{t,k})}{\sum_{\ell=1}^K \pi_\ell \mathcal{N}(\mathbf{x}_t \mid \boldsymbol{\mu}_{t,\ell}, \boldsymbol{\Sigma}_{t,\ell})},
+\end{aligned}
+\end{equation}
+
+where $\boldsymbol{\mu}_{t,k} = (1-t) \boldsymbol{\mu}_0 + t \boldsymbol{\mu}_k$ and $\boldsymbol{\Sigma}_{t,k} = (1-t)^2 \boldsymbol{\Sigma}_0 + t^2 \boldsymbol{\Sigma}_k$.
+
+Using conditional Gaussian identities (Appendix~\ref{app:derivations}), we obtain the mixture drift by marginalizing over $K$:
+
+\begin{equation}
+\label{eq:mixture_gaussian}
+\begin{aligned}
+\mathbf{v}(\mathbf{x}_t,t) 
+& = \mathbb{E}[\mathbf{x}_1 - \mathbf{x}_0 \mid \mathbf{x}_t] \\
+& = \sum_{k=1}^K \gamma_k(\mathbf{x}_t,t) \bigl[
+    \boldsymbol{\mu}_k - \boldsymbol{\mu}_0 
+    + \mathbf{A}_k(t) (\mathbf{x}_t - \boldsymbol{\mu}_{t,k})
+\bigr],
+\end{aligned}
+\end{equation}
+
+where $\boldsymbol{\mu}_{t,k} = (1-t) \boldsymbol{\mu}_0 + t \boldsymbol{\mu}_k$ and
+
+\begin{equation*}
+\mathbf{A}_k(t) = \left(t \boldsymbol{\Sigma}_k - (1-t) \boldsymbol{\Sigma}_0\right) \left((1-t)^2 \boldsymbol{\Sigma}_0 + t^2 \boldsymbol{\Sigma}_k \right)^{-1}.
+\end{equation*}
+
+\subsection{Findings on Gaussian Conditioning and Connection to Causality}
+\label{subsec:gaussian_condition}
+
+\begin{table*}[h]
+    \centering
+    \caption{Local Jacobians in three generative regimes. Intervention: we nudge the latent while holding the component label $K$ fixed. Observation: we only watch $\mathbf x_t$, so the posterior responsibilities $\gamma_k$ vary with $\mathbf x_t$.}
+    \label{tab:jacobians}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{l c c c@{\hspace{1em}}}
+        \toprule
+        \textbf{Scenario} & \textbf{Structural map ("cause $\to$ effect")}
+        & \textbf{Jacobian under intervention} & \textbf{Jacobian under observation} \\
+        \toprule
+        \\
+        Linear $\mathbf A$ & $\mathbf x = \mathbf A\mathbf z$
+        & Constant $\mathbf A$ & Constant $\mathbf A$ \\
+        \midrule
+        \\
+        Single--Gaussian flow & $\mathbf v(\mathbf x_t,t)=\mathbf A(t) \mathbf x_t+\mathbf b(t)$
+        & Constant in $\mathbf x_t$ & The same affine map \\
+        \midrule
+        \\
+        Mixture of Gaussians & Pick $K \sim \pi$ $\Longrightarrow \mathbf A_K(t) \mathbf x_t + \mathbf b_K(t)$
+        & $\displaystyle \mathbf J_{\text{do}}(\mathbf x_t)=\mathbf A_K(t)$
+        & Smooth but nonlinear, see Equation~\eqref{eq:jacobian-mixture} \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table*}
+
+Table~\ref{tab:jacobians} summarizes how the local Jacobian, hence the outcome of the perturbation analysis, depends on the probabilistic structure that generates $\mathbf x_t$. When causal questions are asked (``\emph{do}'' notation), the latent component label $K$ is held fixed, hence the Jacobian is piecewise constant. From a purely observational standpoint the weights $\gamma_k(\mathbf x_t,t)$ depend on $\mathbf x_t$. The gradient of these weights is what bends the otherwise affine field. With $\mathbf x_0 \sim \mathcal N(0, \mathbf{I}_d)$ and $\mathbf x_1 \sim \mathcal N(0, \boldsymbol\Sigma)$, the flow matching drift,
+
+\begin{equation*}
+    \mathbf v(\mathbf x_t,t)=\bigl(t\boldsymbol\Sigma-(1-t)\mathbf I_d\bigr)
+    \bigl[(1-t)^2\mathbf I_d+t^2\boldsymbol\Sigma\bigr]^{-1}    \mathbf x_t
+\end{equation*}
+
+is \emph{linear in $\mathbf x_t$}, so the Jacobian does not depend on $\mathbf x_t$.  Perturbation analysis is therefore trivial, $\Delta \dot{\mathbf x}_t = \mathbf A(t) \Delta \mathbf x_t$ and $\operatorname{Cov}(\Delta \mathbf x_t) = \mathbf A(t) \mathbf A(t)^{T}$ match the push-forward covariance exactly. Differentiating Equation~\eqref{eq:mixture_gaussian} with respect to $\mathbf x_t$ and applying the product rule gives,
+
+\begin{equation}
+    \nabla_{\mathbf x_t} \mathbf v = \sum_{k} \gamma_k \mathbf A_k(t) + \sum_{k}\left(\nabla_{\mathbf x_t} \gamma_k\right)
+    \left[\boldsymbol \mu_k - \boldsymbol \mu_0 + \mathbf A_k(t) \Delta_k \right]
+    \label{eq:jacobian-mixture}
+\end{equation}
+
+The first term is a convex blend of the affine maps $\mathbf A_k(t)$.  The second term injects the non-linearity. Since the gradient of a softmax (see Equation~\eqref{eq:mixture_responsibilities}) of quadratic forms can be written explicitly as,
+
+\begin{equation*}
+    \nabla_{\mathbf x_t} \gamma_k = \gamma_k \left(\mathbf S_k^{-1} (\mathbf m_k - \mathbf x_t) - \sum_j \gamma_j \mathbf S_j^{-1} (\mathbf m_j - \mathbf x_t)\right),
+\end{equation*}
+
+with $ \mathbf m_k = (1 -  t) \boldsymbol \mu_0 + t \boldsymbol \mu_k$ and $\mathbf S_k = (1-t)^2 \boldsymbol \Sigma_0 + t^2 \boldsymbol \Sigma_k$.  
+
+Inside regions where a single $\gamma_k \approx1$ (i.e., a single component is dominant) the field is locally affine, non-linearity appears only in the transitions between components. To summarize our theoretical findings on the mixture of Gaussians case,
+
+\begin{itemize}
+    \itemsep0em
+    \item \textbf{Mixture of affine drifts.}  Even though the global field can be nonlinear, it can be decomposed into a convex blend of $K$ affine rules.
+    
+    \item \textbf{Local linearity.}  Whenever a responsibility $\gamma_k$ dominates, the drift is effectively the $k$-th linear map.
+    
+    \item \textbf{Shared covariances.} If all $\boldsymbol \Sigma_k = \boldsymbol \Sigma$, then $\mathbf A_k(t) \equiv \mathbf A(t)$ and only the bias term jumps across components.
+    
+    \item \textbf{Endpoints.} At $t=0$ the drift reduces to $\sum_k \pi_k \boldsymbol \mu_k - \mathbf x_0$, at $t=1$ it equals $\mathbf x_1 - \boldsymbol \mu_0$, matching the prescribed boundary conditions $\mathbb{E}[\mathbf x_1] - \mathbf x_0$ and $\mathbf x_1 - \mathbb{E}[\mathbf x_0]$ respectively.
+\end{itemize}
+
+In conclusion, in a simple Gaussian setting, flow matching behaves (approximately) like a linear map. In the harder mixture case, the Jacobian remains tractable, it is the sum of a convex average of linear maps and a softmax‑gradient correction term. In other words, flow matching models learn approximately linear drifts whenever the underlying data distribution is itself close to Gaussian.

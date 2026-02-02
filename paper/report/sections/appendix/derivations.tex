@@ -1,0 +1,38 @@
+\section{Derivations for Gaussian Conditioning}
+\label{app:derivations}
+
+\subsection{Linear Interpolation of Linear Maps}
+Let $\mathbf z, \tilde{\mathbf z} \sim \mathcal{N}(0, \mathbf{I}_d)$ be independent, $\mathbf x = \mathbf A \tilde{\mathbf z}$, and $\mathbf x_t = (1-t)\mathbf z + t \mathbf x$. Then $(\mathbf x, \mathbf x_t)$ is jointly Gaussian with mean zero and covariance
+\begin{equation*}
+\boldsymbol \Sigma = \begin{bmatrix}
+\mathbf A\mathbf A^T & t\mathbf A\mathbf A^T \\
+ t\mathbf A\mathbf A^T & (1-t)^2 \mathbf I_d + t^2 \mathbf A\mathbf A^T
+\end{bmatrix}.
+\end{equation*}
+For a zero-mean jointly Gaussian pair $(\mathbf u, \mathbf v)$ with blocks $\boldsymbol \Sigma_{\mathbf u\mathbf u}$ and $\boldsymbol \Sigma_{\mathbf v\mathbf v}$, the conditional mean is
+\begin{equation*}
+\mathbb{E}[\mathbf u\mid \mathbf v] = \boldsymbol \Sigma_{\mathbf u\mathbf v}\,\boldsymbol \Sigma_{\mathbf v\mathbf v}^{-1}\,\mathbf v.
+\end{equation*}
+Substituting yields
+\begin{equation*}
+\mathbb{E}[\mathbf x\mid \mathbf x_t] = t \mathbf A\mathbf A^T \left((1-t)^2 \mathbf I_d + t^2 \mathbf A\mathbf A^T\right)^{-1}\mathbf x_t.
+\end{equation*}
+
+\subsection{Arbitrary Gaussian Targets}
+For $\mathbf{x}_0 \sim \mathcal{N}(0,\mathbf I_d)$ and $\mathbf{x}_1 \sim \mathcal{N}(0,\boldsymbol\Sigma)$, with $\mathbf{x} = \mathbf{x}_1-\mathbf{x}_0$ and $\mathbf{x}_t=(1-t)\mathbf{x}_0+t\mathbf{x}_1$, the same conditional Gaussian identity yields
+\begin{equation*}
+\mathbb{E}[\mathbf x\mid \mathbf x_t] = \mathrm{Cov}(\mathbf x,\mathbf x_t)\,\mathrm{Cov}(\mathbf x_t,\mathbf x_t)^{-1}\,\mathbf x_t,
+\end{equation*}
+which leads to the Gaussian drift used in the main text.
+
+\subsection{Mixture-of-Gaussians Drift}
+Let $\mathbf{x}_0 \sim \mathcal N(\boldsymbol\mu_0,\boldsymbol\Sigma_0)$ and $\mathbf{x}_1 \sim \sum_{k=1}^K \pi_k\,\mathcal N(\boldsymbol\mu_k,\boldsymbol\Sigma_k)$ with $\mathbf{x}_t=(1-t)\mathbf{x}_0+t\mathbf{x}_1$. The responsibilities
+\begin{equation*}
+\gamma_k(\mathbf x_t,t)=\frac{\pi_k\,\mathcal N(\mathbf x_t\mid \boldsymbol\mu_{t,k},\boldsymbol\Sigma_{t,k})}{\sum_{\ell}\pi_\ell\,\mathcal N(\mathbf x_t\mid \boldsymbol\mu_{t,\ell},\boldsymbol\Sigma_{t,\ell})}
+\end{equation*}
+with $\boldsymbol\mu_{t,k}=(1-t)\boldsymbol\mu_0+t\boldsymbol\mu_k$ and $\boldsymbol\Sigma_{t,k}=(1-t)^2\boldsymbol\Sigma_0+t^2\boldsymbol\Sigma_k$ follow from Bayes' rule. Conditioning on $K=k$ gives a jointly Gaussian pair $(\mathbf x_0,\mathbf x_1)$, and with $\mathbf S_k=(1-t)^2\boldsymbol\Sigma_0+t^2\boldsymbol\Sigma_k$ and $\boldsymbol\delta_k=\mathbf x_t-(1-t)\boldsymbol\mu_0-t\boldsymbol\mu_k$, we obtain
+\begin{align*}
+\mathbb{E}[\mathbf{x}_1 \mid \mathbf{x}_t, K=k] &= \boldsymbol\mu_k + t\boldsymbol\Sigma_k\,\mathbf S_k^{-1}\,\boldsymbol\delta_k, \\
+\mathbb{E}[\mathbf{x}_0 \mid \mathbf{x}_t, K=k] &= \boldsymbol\mu_0 + (1-t)\boldsymbol\Sigma_0\,\mathbf S_k^{-1}\,\boldsymbol\delta_k.
+\end{align*}
+Subtracting and marginalizing over $K$ yields the mixture drift in Equation~\eqref{eq:mixture_gaussian}.

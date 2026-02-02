@@ -1,0 +1,29 @@
+\section{Discussion and Conclusion}
+\label{sec:discussion_conclusion}
+In this work, we have established two main results. First, by deriving closed-form expressions for the conditional expectations in the Gaussian and mixture of Gaussians settings, we show that even when the global drift field is nonlinear, it admits local affine decompositions whose Jacobians are analytically tractable. Second, by analyzing how perturbations propagate through the learned flow, we demonstrate that the empirical Jacobian can recover dependency structures between generated features, both at the pixel level and, when composed with a classifier, at the attribute level.
+
+We emphasize an important distinction: our empirical ``intervention'' in the CelebA experiments (conditioning on samples where the classifier Jacobian norm for a given attribute is small) constitutes conditioning on a subset of the data, i.e., $P(y \mid \|\mathbf{J}\| \text{ small})$, rather than a true $\mathrm{do}$-operation that modifies the data-generating process. While the results are \emph{consistent with} the hypothesized causal structure (the correlation between two attributes drops when we condition on their putative common cause), this does not constitute causal inference in the formal sense of Pearl's framework. Formalizing the connection between Jacobian-based filtering and structural interventions remains an open problem.
+
+\subsection{Limitations}
+Several limitations warrant consideration. First, our closed-form theoretical results assume Gaussian or mixture-of-Gaussian structure; real-world data distributions are considerably more complex, and the quality of the local affine approximation in such settings is not yet characterized. Second, relying on a pretrained classifier $\mathbf{C}_\theta$ to map pixel perturbations to semantic labels introduces inductive biases that may affect estimated dependencies. Third, while we compute Jacobian-vector products (not the full Jacobian matrix), the number of probes needed to estimate the correlation structure can still be costly for large-scale models. Fourth, the Jacobian-norm threshold used to approximate interventions is heuristic, and a sensitivity analysis of this choice has not been conducted. Finally, we have not tested the method on known causal structures beyond common causes; in particular, a collider test (where conditioning on a collider should \emph{increase} rather than decrease correlations) would provide an important sanity check.
+
+\subsection{Future Directions}
+Building on our findings and the feedback received, we identify several promising directions:
+
+\begin{itemize}
+  \itemsep0em
+  \item \textbf{From conditioning to intervention}: Developing methods that modify the generative flow itself (rather than filtering its outputs) to implement true $\mathrm{do}$-operations via Jacobian manipulation.
+
+  \item \textbf{Causal structure testing}: Evaluating the method on synthetic datasets with known causal graphs containing common causes, colliders, and mediators, to rigorously assess whether the approach can distinguish between these structures.
+
+  \item \textbf{Beyond Gaussians}: Extending the local affine characterization to richer distribution families, or establishing conditions under which the Gaussian approximation remains adequate.
+
+  \item \textbf{Counterfactual inference}: Extending to level 3 of the causal ladder, $P(y_{x'}\mid x,y)$, within flow matching inference.
+
+  \item \textbf{Scalable JVP methods}: Leveraging automatic differentiation, randomized sketching, or power iteration to reduce the number of probes needed for high-dimensional settings.
+
+  \item \textbf{Connections to disentanglement}: Relating our Jacobian-based analysis to the disentanglement literature~\cite{wei2021orthogonal, khrulkov2021disentangled}, where Jacobian regularization is used to encourage independent latent factors.
+\end{itemize}
+
+\subsection{Concluding Remarks}
+In summary, we have provided a theoretical foundation for understanding how flow matching models encode local dependency structure, and an empirical methodology for extracting this structure via small latent perturbations. While the causal interpretation of our findings requires further development (particularly the formalization of true interventions within the generative process), we believe this work lays useful groundwork for more transparent and interpretable generative models.

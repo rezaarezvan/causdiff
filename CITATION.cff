@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "Causality--Δ: Jacobian-Based Dependency Analysis in Flow Matching Models"
+message: "If you use this software, please cite the paper."
+authors:
+  - family-names: "Rezvan"
+    given-names: "Reza"
+  - family-names: "Gille"
+    given-names: "Gustav"
+  - family-names: "Schauer"
+    given-names: "Moritz"
+  - family-names: "Torkar"
+    given-names: "Richard"
+version: "0.1.0"
+date-released: "2026-02-02"
+url: "https://github.com/rezaarezvan/causdiff"
+license: "MIT"
+preferred-citation:
+  type: article
+  title: "Causality--Δ: Jacobian-Based Dependency Analysis in Flow Matching Models"
+  authors:
+    - family-names: "Rezvan"
+      given-names: "Reza"
+    - family-names: "Gille"
+      given-names: "Gustav"
+    - family-names: "Schauer"
+      given-names: "Moritz"
+    - family-names: "Torkar"
+      given-names: "Richard"
+  year: 2026
+  url: "https://arxiv.org/abs/XXXX.XXXXX"
